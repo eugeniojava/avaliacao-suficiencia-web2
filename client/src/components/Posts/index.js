@@ -1,15 +1,14 @@
-import React, { useEffect, useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../../services/api";
+import React, { useEffect, useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from '../../services/api';
 
 const Posts = () => {
   const navigate = useNavigate();
-
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    api.get("/posts").then((response) => {
+    api.get('/posts').then((response) => {
       setPosts(response.data);
     });
   }, []);
@@ -36,15 +35,15 @@ const Posts = () => {
             key={index.toString()}
             className="card m-3"
             style={{
-              width: "18rem",
+              width: '18rem',
             }}
           >
             <div className="card-body">
               <h5 className="card-title">{item.title}</h5>
-              <p className="card-text">{item.body}</p>
+              <p className="card-text">{item.content}</p>
               <button
                 onClick={() =>
-                  navigate("/post", {
+                  navigate(`/post/${item.id}`, {
                     state: {
                       post: item,
                     },
@@ -53,10 +52,10 @@ const Posts = () => {
                 type="button"
                 className="btn btn-primary"
                 style={{
-                  backgroundColor: "#1c8ef9",
+                  backgroundColor: '#1c8ef9',
                 }}
               >
-                Go somewhere
+                Read more
               </button>
             </div>
           </div>

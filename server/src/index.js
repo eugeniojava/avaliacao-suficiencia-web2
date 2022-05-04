@@ -1,12 +1,16 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const jwt = require('jsonwebtoken');
 
 const app = express();
-// const API_PREFIX = process.env.API_PREFIX;
-app.use('/api/v1', require('./route/postRoute'));
-app.use('/api/v1', require('./route/uploadRoute'));
+app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+const API_PREFIX = process.env.API_PREFIX;
+app.use(API_PREFIX, require('./route/postRoute'));
+app.use(API_PREFIX, require('./route/uploadRoute'));
+app.use(API_PREFIX, require('./route/userRoute'));
 const PORT = process.env.PORT || 8080;
 
 app.get('/api/auth', (request, response) => {

@@ -1,22 +1,19 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useAuth } from "../../contexts/authentication";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../../contexts/authentication';
 
 export default function Login() {
   const { login } = useAuth();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = async () => {
-    setError("");
+    setError('');
     try {
       await login(email, password);
     } catch (error) {
-      // setError(error.data.message);
-      setError("errado");
+      setError(error.data.message);
     }
   };
 
@@ -60,7 +57,7 @@ export default function Login() {
             )}
           </div>
           <p className="forgot-password text-right">
-            <Link to={"/register"}>Create an account</Link>
+            <Link to={'/register'}>Create an account</Link>
           </p>
         </form>
       </div>

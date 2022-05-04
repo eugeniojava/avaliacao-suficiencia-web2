@@ -1,22 +1,22 @@
-import React, { useState } from "react";
-import api from "../../services/api";
+import React, { useState } from 'react';
+import api from '../../services/api';
 
 export default function Login() {
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
 
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const handleSubmit = async () => {
-    setError("");
+    setError('');
     try {
-      await api.post("/posts", {
+      await api.post('/posts', {
         title,
         body,
       });
     } catch (error) {
       // setError(error.data.message);
-      setError("errado");
+      setError('errado');
     }
   };
 

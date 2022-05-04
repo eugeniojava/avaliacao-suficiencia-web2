@@ -1,23 +1,27 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useAuth } from "../../contexts/authentication";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+
+import { useAuth } from '../../contexts/authentication';
 
 export default function Register() {
+  const navigate = useNavigate();
   const { register } = useAuth();
-
-  const [login, setLogin] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const [error, setError] = useState("");
+  const [login, setLogin] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = async () => {
-    setError("");
+    setError('');
     try {
+      if (login === '' || email === '' || password === '') {
+        setError('All fields are required');
+        return;
+      }
       await register(login, email, password);
+      navigate('/');
     } catch (error) {
-      // setError(error.data.message);
-      setError("errado");
+      setError(error.data.message);
     }
   };
 
@@ -64,7 +68,6 @@ export default function Register() {
             >
               Register
             </button>
-
             {error && (
               <div class="alert alert-danger mt-3" role="alert">
                 {error}
@@ -72,7 +75,7 @@ export default function Register() {
             )}
           </div>
           <p className="forgot-password text-right">
-            <Link to={"/login"}>Already registered</Link>
+            <Link to={'/login'}>Already registered</Link>
           </p>
         </form>
       </div>
