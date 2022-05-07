@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { useAuth } from '../../contexts/authentication';
+import { useAuth } from '../../contexts/auth';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -10,7 +10,6 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-
   const handleSubmit = async () => {
     setError('');
     try {
@@ -19,12 +18,11 @@ export default function Register() {
         return;
       }
       await register(login, email, password);
-      navigate('/');
+      navigate('/login');
     } catch (error) {
-      setError(error.data.message);
+      setError('deu ruim');
     }
   };
-
   return (
     <div className="auth-wrapper">
       <div className="auth-inner">
@@ -69,7 +67,7 @@ export default function Register() {
               Register
             </button>
             {error && (
-              <div class="alert alert-danger mt-3" role="alert">
+              <div className="alert alert-danger mt-3" role="alert">
                 {error}
               </div>
             )}

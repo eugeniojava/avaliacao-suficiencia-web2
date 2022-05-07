@@ -4,24 +4,22 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom';
 
-import Login from './components/Login';
-import Register from './components/Register';
-import Posts from './components/Posts';
-import Post from './components/Post';
 import CreatePost from './components/CreatePost';
+import Login from './components/Login';
+import Post from './components/Post';
+import Posts from './components/Posts';
+import Register from './components/Register';
+import { useAuth } from './contexts/auth';
 import Private from './private';
-
-import { useAuth } from './contexts/authentication';
 
 function App() {
   const { currentUser, logout } = useAuth();
-
   return (
     <Router>
       <div className="App">
         <nav className="navbar navbar-expand-lg navbar-light">
           <div className="container">
-            <Link className="navbar-brand" to={'/posts'}>
+            <Link className="navbar-brand" to={'/'}>
               My Posts
             </Link>
             <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
@@ -51,7 +49,6 @@ function App() {
                     Posts
                   </Link>
                 </div>
-
                 {currentUser && (
                   <div className="nav-item">
                     <button
@@ -69,7 +66,6 @@ function App() {
             </div>
           </div>
         </nav>
-
         <Routes>
           <Route exact path="/" element={<Posts />} />
           <Route path="/login" element={<Login />} />

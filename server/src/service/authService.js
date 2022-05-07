@@ -1,45 +1,49 @@
+require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const userData = require('../data/userData');
+const userService = require('../service/userService');
 
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const EXPIRES_IN = '1h';
 
 exports.login = async function (login, password) {
-  const user = await userData.findByLogin(login);
-  if (!user || !bcrypt.compareSync(password, user.password)) {
+  if (!login || !password) {
+    throw new Error('Login and password are required');
+  }
+  const user = await userService.findByLogin(login);
+  if (!bcrypt.compareSync(password, user.password)) {
     throw new Error('Bad credentials');
   }
   return {
+    id: user.id,
     login: user.login,
     email: user.email,
-    accessToken: generateAccessToken(user),
+    accessToken: generateAccessToken({
+      id: user.id,
+      login: user.login,
+      email: user.email,
+    }),
   };
 };
 
 function generateAccessToken(user) {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+  return jwt.sign(user, ACCESS_TOKEN_SECRET, {
     expiresIn: EXPIRES_IN,
   });
 }
 
-app.get('/api/auth', (request, response) => {
-  const username = request.body.username;
-  const user = { username };
-  const accessToken = generateAccessToken(user);
-  response.json({ accessToken });
-});
-
-function authenticate(request, response, next) {
-  const authorizationHeader = request.headers.authorization;
-  const token = authorizationHeader && authorizationHeader.split(' ')[1];
-  if (token == null) {
-    return response.sendStatus(401);
+exports.authenticate = function (request, response, next) {
+  const token =
+    request.headers.authorization &&
+    request.headers.authorization.split(' ')[1];
+  if (!token) {
+    throw new Error('No token provided');
   }
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, user) => {
+  jwt.verify(token, ACCESS_TOKEN_SECRET, (error, user) => {
     if (error) {
-      return response.sendStatus(403);
+      throw new Error('Token is invalid');
     }
     request.user = user;
     next();
   });
-}
+};

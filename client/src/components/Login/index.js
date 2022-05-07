@@ -1,29 +1,34 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../../contexts/authentication';
+import { Link, useNavigate } from 'react-router-dom';
+
+import { useAuth } from '../../contexts/auth';
 
 export default function Login() {
+  const navigate = useNavigate();
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-
   const handleSubmit = async () => {
     setError('');
     try {
+      if (email === '' || password === '') {
+        setError('All fields are required');
+        return;
+      }
       await login(email, password);
+      navigate('/');
     } catch (error) {
-      setError(error.data.message);
+      setError('deu ruim');
     }
   };
-
   return (
     <div className="auth-wrapper">
       <div className="auth-inner">
         <form>
           <h3>Login</h3>
           <div className="mb-3">
-            <label>Email</label>
+            <label>Login</label>
             <input
               type="email"
               className="form-control"
@@ -51,7 +56,7 @@ export default function Login() {
               Submit
             </button>
             {error && (
-              <div class="alert alert-danger mt-3" role="alert">
+              <div className="alert alert-danger mt-3" role="alert">
                 {error}
               </div>
             )}

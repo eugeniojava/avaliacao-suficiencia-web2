@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import api from '../../services/api';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
+  const navigate = useNavigate();
   const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
+  const [content, setContent] = useState('');
 
   const [error, setError] = useState('');
 
@@ -12,8 +14,9 @@ export default function Login() {
     try {
       await api.post('/posts', {
         title,
-        body,
+        content,
       });
+      navigate('/');
     } catch (error) {
       // setError(error.data.message);
       setError('errado');
@@ -41,8 +44,8 @@ export default function Login() {
               type="text"
               className="form-control"
               placeholder="Enter post body"
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
             />
           </div>
           <div className="d-grid">

@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const postService = require('../service/postService');
+const authenticate = require('../service/authService').authenticate;
 
 router.get('/posts', async function (request, response, next) {
   try {
@@ -10,7 +11,7 @@ router.get('/posts', async function (request, response, next) {
   }
 });
 
-router.post('/posts', async function (request, response, next) {
+router.post('/posts', authenticate, async function (request, response, next) {
   if (!request.body.title || !request.body.content) {
     response.status(400).json({ error: 'Title and content are required' });
   }
@@ -23,29 +24,37 @@ router.post('/posts', async function (request, response, next) {
   }
 });
 
-router.put('/posts/:postId', async function (request, response, next) {
-  const postId = request.params.postId;
-  if (!postId) response.status(400).json({ error: 'Post id is required' });
-  const post = request.body;
-  if (!post.title || !post.content) {
-    response.status(400).json({ error: 'Title and content are required' });
+router.put(
+  '/posts/:postId',
+  authenticate,
+  async function (request, response, next) {
+    const postId = request.params.postId;
+    if (!postId) response.status(400).json({ error: 'Post id is required' });
+    const post = request.body;
+    if (!post.title || !post.content) {
+      response.status(400).json({ error: 'Title and content are required' });
+    }
+    try {
+      await postService.updateById(postId, post);
+      response.status(204).end();
+    } catch (error) {
+      next(error);
+    }
   }
-  try {
-    await postService.updateById(postId, post);
-    response.status(204).end();
-  } catch (error) {
-    next(error);
-  }
-});
+);
 
-router.delete('/posts/:postId', async function (request, response, next) {
-  const postId = request.params.postId;
-  try {
-    await postService.deleteById(postId);
-    response.status(204).end();
-  } catch (error) {
-    next(error);
+router.delete(
+  '/posts/:postId',
+  authenticate,
+  async function (request, response, next) {
+    const postId = request.params.postId;
+    try {
+      await postService.deleteById(postId);
+      response.status(204).end();
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 module.exports = router;

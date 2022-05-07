@@ -3,6 +3,12 @@ const userData = require('../data/userData');
 
 const ENCRYPTION_SALT = 10;
 
+exports.findByLogin = async function (login) {
+  const user = await userData.findByLogin(login);
+  if (!user) throw new Error('User not found');
+  return user;
+};
+
 exports.save = async function (user) {
   if (!user.login || !user.email || !user.password) {
     throw new Error('Login, email and password are required');
