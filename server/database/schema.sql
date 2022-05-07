@@ -1,19 +1,32 @@
-create table "users" (
-  "id" bigserial primary key,
-  "login" varchar(255) not null,
-  "email" varchar(255) not null,
-  "password" varchar(255) not null
+CREATE TABLE "users" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "login" VARCHAR(255) NOT NULL,
+  "email" VARCHAR(255) NOT NULL,
+  "password" VARCHAR(255) NOT NULL
 );
 
-create table "posts" (
-  "id" bigserial primary key,
-  "title" varchar(255) not null,
-  "content" text not null
+-- Password: admin
+INSERT INTO "users" ("login", "email", "password")
+VALUES ('admin', 'admin@admin.com', '$2b$10$5UK.OehThTfSwpJsB5cbaeGmRg/6GJ9Qxut3Wydi1zHMB0Gpmql6G');
+
+-- SELECT * FROM "users";
+
+-- DELETE FROM "users";
+
+CREATE TABLE "posts" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "title" VARCHAR(255) NOT NULL,
+  "content" TEXT NOT NULL
 );
 
-insert into "posts" ("title", "content")
-values ('Post 1 title', 'Post 1 content'),
-       ('Post 2 title', 'Post 2 content'),
-       ('Post 3 title', 'Post 3 content'),
-       ('Post 4 title', 'Post 4 content'),
-       ('Post 5 title', 'Post 5 content');
+INSERT INTO "posts" ("title", "content")
+VALUES
+('Post title 1', "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."),
+('Post title 2', "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."),
+('Post title 3', "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."),
+('Post title 4', "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."),
+('Post title 5', "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
+
+-- SELECT * FROM "posts";
+
+-- DELETE FROM "posts";

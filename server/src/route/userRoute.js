@@ -1,13 +1,18 @@
 const router = require('express').Router();
 const userService = require('../service/userService');
 
-router.post('/users', async function (request, response) {
-  const { login, email, password } = request.body;
-  if (!login || !email || !password) {
-    return response.status(400).json({ message: 'Invalid fields sent' });
+router.post('/users', async function (request, response, next) {
+  const newUser = {
+    login: request.body.login,
+    email: request.body.email,
+    password: request.body.password,
+  };
+  try {
+    const savedUser = await userService.save(newUser);
+    response.status(201).json(savedUser);
+  } catch (error) {
+    next(error);
   }
-  const toBeSaved = { login, email, password };
-  userService.create(toBeSaved).then((user) => response.status(201).send(user));
 });
 
 module.exports = router;

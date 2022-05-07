@@ -2,13 +2,25 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const userData = require('../data/userData');
 
+const EXPIRES_IN = '1h';
+
 exports.login = async function (login, password) {
   const user = await userData.findByLogin(login);
   if (!user || !bcrypt.compareSync(password, user.password)) {
-    return null;
+    throw new Error('Bad credentials');
   }
-  return user;
+  return {
+    login: user.login,
+    email: user.email,
+    accessToken: generateAccessToken(user),
+  };
 };
+
+function generateAccessToken(user) {
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: EXPIRES_IN,
+  });
+}
 
 app.get('/api/auth', (request, response) => {
   const username = request.body.username;
@@ -16,10 +28,6 @@ app.get('/api/auth', (request, response) => {
   const accessToken = generateAccessToken(user);
   response.json({ accessToken });
 });
-
-function generateAccessToken(user) {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s' });
-}
 
 function authenticate(request, response, next) {
   const authorizationHeader = request.headers.authorization;

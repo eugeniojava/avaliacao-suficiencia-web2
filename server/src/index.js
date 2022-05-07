@@ -14,13 +14,20 @@ app.use(API_PREFIX, require('./route/userRoute'));
 app.use(API_PREFIX, require('./route/uploadRoute'));
 
 app.use(function (error, request, response, next) {
-  if (error.message === 'Post already exists') {
-    return response.status(409).send(error.message);
+  if (
+    error.message === 'Login already registered' ||
+    error.message === 'Email already registered' ||
+    error.message === 'Post with this title already exists'
+  ) {
+    return response.status(409).json({ error: error.message });
   }
   if (error.message === 'Post not found') {
-    return response.status(404).send(error.message);
+    return response.status(404).json({ error: error.message });
   }
-  response.status(500).send(error.message);
+  if (error.message === 'Login, email and password are required') {
+    return response.status(400).json({ error: error.message });
+  }
+  response.status(500).json({ error: error.message });
 });
 
 app.listen(API_PORT, () => {

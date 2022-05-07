@@ -50,7 +50,7 @@ test('Should save a post', async function () {
   await postService.deleteById(response.data.id);
 });
 
-test('Should not save a post when the title already exists', async function () {
+test('Should not save a post when title already exists', async function () {
   const post = {
     title: generateRandomString(),
     content: generateRandomString(),
@@ -60,6 +60,7 @@ test('Should not save a post when the title already exists', async function () {
   const response2 = await request(`${API_URL}/posts`, 'POST', post);
 
   expect(response2.status).toBe(409);
+  expect(response2.data.error).toBe('Post with this title already exists');
   await postService.deleteById(response1.data.id);
 });
 
@@ -93,6 +94,7 @@ test('Should not update a post when it does not exist', async function () {
   const response = await request(`${API_URL}/posts/${post.id}`, 'PUT', post);
 
   expect(response.status).toBe(404);
+  expect(response.data.error).toBe('Post not found');
 });
 
 test('Should delete a post', async function () {

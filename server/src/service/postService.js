@@ -12,7 +12,7 @@ exports.findById = async function (postId) {
 
 exports.save = async function (post) {
   const existingPost = await postData.findByTitle(post.title);
-  if (existingPost) throw new Error('Post already exists');
+  if (existingPost) throw new Error('Post with this title already exists');
   return postData.save(post);
 };
 
