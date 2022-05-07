@@ -1,4 +1,8 @@
-const database = require('../infrastructure/database');
+const database = require('../infra/database');
+
+exports.findByLogin = function (login) {
+  return database.one('SELECT * FROM users WHERE login = $1', [login]);
+};
 
 exports.create = function (user) {
   return database.one(
