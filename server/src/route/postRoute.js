@@ -4,7 +4,14 @@ const authenticate = require('../service/authService').authenticate;
 
 router.get('/posts', async function (request, response, next) {
   try {
-    const posts = await postService.findAll();
+    let posts;
+    if (request.query.filter) {
+      posts = await postService.findByTitleAndContentLike(request.query.filter);
+    } else if (request.query.author) {
+      posts = await postService.findByAuthor(request.query.author);
+    } else {
+      posts = await postService.findAll();
+    }
     response.json(posts);
   } catch (error) {
     next(error);

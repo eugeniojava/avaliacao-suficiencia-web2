@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import api from '../../services/api';
 import { useNavigate } from 'react-router-dom';
+
+import api from '../../services/api';
 
 export default function Login() {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-
   const [error, setError] = useState('');
 
   const handleSubmit = async () => {
@@ -18,8 +18,7 @@ export default function Login() {
       });
       navigate('/');
     } catch (error) {
-      // setError(error.data.message);
-      setError('errado');
+      setError(error.response.data.error);
     }
   };
 
@@ -57,7 +56,7 @@ export default function Login() {
               Submit
             </button>
             {error && (
-              <div class="alert alert-danger mt-3" role="alert">
+              <div className="alert alert-danger mt-3" role="alert">
                 {error}
               </div>
             )}

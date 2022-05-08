@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom';
 
 const Post = () => {
   const { state } = useLocation();
-
   const { post } = state;
 
   return (

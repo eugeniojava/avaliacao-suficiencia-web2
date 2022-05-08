@@ -1,7 +1,47 @@
 const database = require('../infra/database');
 
 exports.findAll = function () {
-  return database.query('SELECT * FROM "posts"');
+  return database.query(
+    `SELECT p.id AS id,
+            p.title AS title,
+            p.content AS content,
+            p.user_id AS "userId",
+            u."login" AS login
+    FROM "posts" p
+    JOIN "users" u ON u.id = p.user_id
+    `
+  );
+};
+
+exports.findByTitleAndContentLike = function (filter) {
+  return database.query(
+    `SELECT p.id AS id,
+            p.title AS title,
+            p.content AS content,
+            p.user_id AS "userId",
+            u."login" AS login
+    FROM "posts" p
+    JOIN "users" u ON u.id = p.user_id
+    WHERE p."title" LIKE '%Ipsum%'
+          OR p."content" LIKE '%Ipsum%'
+    `,
+    [`%${filter}%`]
+  );
+};
+
+exports.findByAuthor = function (author) {
+  return database.query(
+    `SELECT p.id AS id,
+            p.title AS title,
+            p.content AS content,
+            p.user_id AS "userId",
+            u."login" AS login
+     FROM "posts" p
+     JOIN "users" u ON u.id = p.user_id
+     WHERE u.login = $1
+  `,
+    [author]
+  );
 };
 
 exports.findById = function (postId) {

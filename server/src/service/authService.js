@@ -14,10 +14,12 @@ exports.login = async function (login, password) {
   if (!bcrypt.compareSync(password, user.password)) {
     throw new Error('Bad credentials');
   }
+  console.log(JSON.stringify(user));
   return {
     id: user.id,
     login: user.login,
     email: user.email,
+    isAdmin: user.is_admin,
     accessToken: generateAccessToken({
       id: user.id,
       login: user.login,

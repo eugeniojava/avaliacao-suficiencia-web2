@@ -9,6 +9,7 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+
   const handleSubmit = async () => {
     setError('');
     try {
@@ -19,9 +20,10 @@ export default function Login() {
       await login(email, password);
       navigate('/');
     } catch (error) {
-      setError('deu ruim');
+      setError(error.response.data.error);
     }
   };
+
   return (
     <div className="auth-wrapper">
       <div className="auth-inner">

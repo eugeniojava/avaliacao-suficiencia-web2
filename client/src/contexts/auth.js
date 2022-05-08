@@ -14,6 +14,14 @@ const LOCAL_STORAGE_NAME = '@my-posts';
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(false);
 
+  const register = useCallback(async (login, email, password) => {
+    const { data: user } = await api.post('/users', {
+      login,
+      email,
+      password,
+    });
+  }, []);
+
   const login = useCallback(async (login, password) => {
     const { data: response } = await api.post('/auth/login', {
       login,
@@ -25,16 +33,9 @@ export const AuthProvider = ({ children }) => {
       id: response.id,
       login: response.login,
       email: response.email,
+      isAdmin: response.isAdmin,
     };
     setCurrentUser(user);
-  }, []);
-
-  const register = useCallback(async (login, email, password) => {
-    const { data: user } = await api.post('/users', {
-      login,
-      email,
-      password,
-    });
   }, []);
 
   const logout = useCallback(async () => {
@@ -44,10 +45,8 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const user = localStorage.getItem(LOCAL_STORAGE_NAME);
-    console.log(user);
     if (user) {
       const parsedUse = JSON.parse(user);
-      console.log(parsedUse);
       api.defaults.headers.Authorization = `Bearer ${parsedUse.accessToken}`;
       setCurrentUser(parsedUse);
     }

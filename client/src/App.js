@@ -8,6 +8,7 @@ import CreatePost from './components/CreatePost';
 import Login from './components/Login';
 import Post from './components/Post';
 import Posts from './components/Posts';
+import Profile from './components/Profile';
 import Register from './components/Register';
 import { useAuth } from './contexts/auth';
 import Private from './private';
@@ -24,6 +25,13 @@ function App() {
             </Link>
             <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
               <div className="navbar-nav container">
+                {currentUser && (
+                  <div className="nav-item">
+                    <Link className="nav-link" to={'/profile'}>
+                      Profile
+                    </Link>
+                  </div>
+                )}
                 {currentUser ? (
                   <div className="nav-item">
                     <Link className="nav-link" to={'/create-post'}>
@@ -53,12 +61,12 @@ function App() {
                   <div className="nav-item">
                     <button
                       onClick={logout}
-                      className="btn btn-danger ml-auto"
+                      className="btn btn-danger"
                       style={{
-                        marginLeft: 'auto',
+                        marginLeft: '10px',
                       }}
                     >
-                      Sair
+                      Logout
                     </button>
                   </div>
                 )}
@@ -70,15 +78,21 @@ function App() {
           <Route exact path="/" element={<Posts />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-
           <Route path="/posts" element={<Posts />} />
           <Route path="/post/:id" element={<Post />} />
-
           <Route
             path="/create-post"
             element={
               <Private>
                 <CreatePost />
+              </Private>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <Private>
+                <Profile />
               </Private>
             }
           />

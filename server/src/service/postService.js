@@ -4,6 +4,14 @@ exports.findAll = function () {
   return postData.findAll();
 };
 
+exports.findByTitleAndContentLike = function (filter) {
+  return postData.findByTitleAndContentLike(filter);
+};
+
+exports.findByAuthor = function (author) {
+  return postData.findByAuthor(author);
+};
+
 exports.findById = async function (postId) {
   const post = await postData.findById(postId);
   if (!post) throw new Error('Post not found');
