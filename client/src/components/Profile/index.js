@@ -82,8 +82,8 @@ export default function Login() {
                 <div className="alert alert-success mt-3" role="alert">
                   {success}
                 </div>
-                <div class="d-flex justify-content-center mt-3 text-success">
-                  <div class="spinner-border" role="status"></div>
+                <div className="d-flex justify-content-center mt-3 text-success">
+                  <div className="spinner-border" role="status"></div>
                 </div>
               </>
             )}

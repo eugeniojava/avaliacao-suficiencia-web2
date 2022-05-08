@@ -37,7 +37,6 @@ exports.save = async function (user) {
 
 exports.updateById = async function (userId, user) {
   await exports.findById(userId);
-  console.log(JSON.stringify(user));
   if (!user.password || user.password === '') {
     return userData.updateById(userId, user);
   }

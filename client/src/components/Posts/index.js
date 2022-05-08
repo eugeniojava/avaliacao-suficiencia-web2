@@ -11,6 +11,7 @@ const Posts = () => {
   const [authors, setAuthors] = useState([]);
   const [search, setSearch] = useState('');
   const [posts, setPosts] = useState([]);
+  const [success, setSuccess] = useState('');
 
   useEffect(() => {
     if (authors.length <= 0) {
@@ -43,14 +44,34 @@ const Posts = () => {
     }
   }, [search]);
 
+  const deletePostById = (postId) => {
+    api.delete(`/posts/${postId}`).then(() => {
+      setPosts(posts.filter((post) => post.id !== postId));
+      setSuccess('Post deleted successfully');
+    });
+  };
+
   return (
     <div className="container">
+      {success && (
+        <div className="alert alert-success mt-3" role="alert">
+          Post deleted successfully
+          <button
+            type="button"
+            className="btn-close"
+            aria-label="Close"
+            onClick={() => {
+              setSuccess('');
+            }}
+          ></button>
+        </div>
+      )}
       <select
         className="form-select mt-3"
         value={author}
         onChange={(e) => setAuthor(e.target.value)}
       >
-        <option defaultValue="">Filter by author</option>
+        <option value="">Filter by author</option>
         {authors.map((item, index) => (
           <option key={index.toString()} value={item.login}>
             {item.login}
@@ -95,17 +116,11 @@ const Posts = () => {
               </button>
               {currentUser.isAdmin && (
                 <button
-                  onClick={() =>
-                    navigate(`/post/${item.id}`, {
-                      state: {
-                        post: item,
-                      },
-                    })
-                  }
+                  onClick={() => deletePostById(item.id)}
                   type="button"
-                  className="btn btn-primary"
+                  className="btn btn-danger"
                   style={{
-                    backgroundColor: '#1c8ef9',
+                    marginLeft: '5px',
                   }}
                 >
                   Delete
