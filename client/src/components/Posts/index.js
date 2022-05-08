@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/auth';
 import api from '../../services/api';
 
-const Posts = () => {
+export default function Posts() {
   const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
   const [author, setAuthor] = useState('');
@@ -13,23 +13,26 @@ const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [success, setSuccess] = useState('');
 
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     // You can await here
+  //     const response = await MyAPI.getData(someId);
+  //     // ...
+  //   }
+  //   fetchData();
+  // }, [someId]); // Or [] if effect doesn't need props or state
+
   useEffect(() => {
-    if (authors.length <= 0) {
-      api.get('/users?filter=having-post').then(({ data }) => {
-        setAuthors(data);
-      });
+    async function fetchData() {
+      try {
+        const response = await api.get('/users?filter=having-post');
+        setAuthors(response.data);
+      } catch (error) {
+        setAuthors([]);
+      }
     }
-    if (author) {
-      setSearch('');
-      api.get(`/posts?author=${author}`).then((response) => {
-        setPosts(response.data);
-      });
-    } else {
-      api.get('/posts').then((response) => {
-        setPosts(response.data);
-      });
-    }
-  }, [author, authors]);
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (search) {
@@ -43,6 +46,19 @@ const Posts = () => {
       });
     }
   }, [search]);
+
+  useEffect(() => {
+    if (author) {
+      setSearch('');
+      api.get(`/posts?author=${author}`).then((response) => {
+        setPosts(response.data);
+      });
+    } else {
+      api.get('/posts').then((response) => {
+        setPosts(response.data);
+      });
+    }
+  }, [author]);
 
   const deletePostById = (postId) => {
     api.delete(`/posts/${postId}`).then(() => {
@@ -81,7 +97,7 @@ const Posts = () => {
       <input
         type="text"
         className="form-control mt-3"
-        placeholder="Search"
+        placeholder="Search by title and content"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
@@ -132,6 +148,4 @@ const Posts = () => {
       </div>
     </div>
   );
-};
-
-export default Posts;
+}

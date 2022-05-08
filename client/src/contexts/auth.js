@@ -46,17 +46,17 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const user = localStorage.getItem(LOCAL_STORAGE_NAME);
     if (user) {
-      const parsedUse = JSON.parse(user);
-      api.defaults.headers.Authorization = `Bearer ${parsedUse.accessToken}`;
-      setCurrentUser(parsedUse);
+      const parsedUser = JSON.parse(user);
+      api.defaults.headers.Authorization = `Bearer ${parsedUser.accessToken}`;
+      setCurrentUser(parsedUser);
     }
   }, []);
 
   return (
     <AuthContext.Provider
       value={{
-        register,
         currentUser,
+        register,
         login,
         logout,
       }}

@@ -12,6 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(API_PREFIX, require('./route/authRoute'));
 app.use(API_PREFIX, require('./route/postRoute'));
 app.use(API_PREFIX, require('./route/userRoute'));
+app.use(API_PREFIX, require('./route/uploadRoute'));
 
 app.use(function (error, request, response, next) {
   if (

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/auth';
 import api from '../../services/api';
 
-export default function Login() {
+export default function Profile() {
   const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
   const [login, setLogin] = useState(currentUser.login);
@@ -38,7 +38,7 @@ export default function Login() {
     <div className="auth-wrapper">
       <div className="auth-inner">
         <form>
-          <h3>My profile</h3>
+          <h3>Profile</h3>
           <div className="mb-3">
             <label>Login *</label>
             <input

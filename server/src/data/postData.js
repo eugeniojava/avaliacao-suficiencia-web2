@@ -22,8 +22,8 @@ exports.findByTitleAndContentLike = function (filter) {
             u."login" AS login
     FROM "posts" p
     JOIN "users" u ON u.id = p.user_id
-    WHERE p."title" LIKE '%Ipsum%'
-          OR p."content" LIKE '%Ipsum%'
+    WHERE p."title" LIKE $1
+          OR p."content" LIKE $1
     `,
     [`%${filter}%`]
   );
@@ -56,8 +56,8 @@ exports.findByTitle = function (title) {
 
 exports.save = function (post) {
   return database.one(
-    'INSERT INTO "posts" ("title", "content") VALUES ($1, $2) RETURNING *',
-    [post.title, post.content]
+    'INSERT INTO "posts" ("title", "content", "user_id", "image_name", "video_name") VALUES ($1, $2, $3, $4, $5) RETURNING *',
+    [post.title, post.content, post.userId, post.imageName, post.videoName]
   );
 };
 

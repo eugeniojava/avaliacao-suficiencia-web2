@@ -22,7 +22,13 @@ router.post('/posts', authenticate, async function (request, response, next) {
   if (!request.body.title || !request.body.content) {
     response.status(400).json({ error: 'Title and content are required' });
   }
-  const post = request.body;
+  const post = {
+    title: request.body.title,
+    content: request.body.content,
+    userId: request.user.id,
+    imageName: request.body.image,
+    videoName: request.body.video,
+  };
   try {
     const savedPost = await postService.save(post);
     response.status(201).json(savedPost);

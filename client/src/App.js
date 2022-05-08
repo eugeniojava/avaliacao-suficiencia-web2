@@ -11,7 +11,7 @@ import Posts from './components/Posts';
 import Profile from './components/Profile';
 import Register from './components/Register';
 import { useAuth } from './contexts/auth';
-import Private from './private';
+import PrivateRoute from './privateRoute';
 
 function App() {
   const { currentUser, logout } = useAuth();
@@ -34,8 +34,8 @@ function App() {
                 )}
                 {currentUser ? (
                   <div className="nav-item">
-                    <Link className="nav-link" to={'/create-post'}>
-                      Create a post
+                    <Link className="nav-link" to={'/posts/new'}>
+                      Create post
                     </Link>
                   </div>
                 ) : (
@@ -79,21 +79,21 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/posts" element={<Posts />} />
-          <Route path="/post/:id" element={<Post />} />
+          <Route path="/posts/:id" element={<Post />} />
           <Route
-            path="/create-post"
+            path="/posts/new"
             element={
-              <Private>
+              <PrivateRoute>
                 <CreatePost />
-              </Private>
+              </PrivateRoute>
             }
           />
           <Route
             path="/profile"
             element={
-              <Private>
+              <PrivateRoute>
                 <Profile />
-              </Private>
+              </PrivateRoute>
             }
           />
         </Routes>

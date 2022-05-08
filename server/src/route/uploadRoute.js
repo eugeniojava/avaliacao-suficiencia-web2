@@ -1,13 +1,14 @@
 const router = require('express').Router();
 const multer = require('multer');
 const multerConfig = require('../config/multer');
+const authenticate = require('../service/authService').authenticate;
 
-router.get(
+router.post(
   '/upload',
+  authenticate,
   multer(multerConfig).single('file'),
   (request, response) => {
-    console.log(request.file);
-    response.json({ message: 'OK' });
+    response.status(201).json({ fileName: request.file.filename });
   }
 );
 

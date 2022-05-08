@@ -8,7 +8,9 @@ CREATE TABLE "users" (
 
 -- Password: admin
 INSERT INTO "users" ("login", "email", "password", "is_admin")
-VALUES ('admin', 'admin@admin.com', '$2b$10$5UK.OehThTfSwpJsB5cbaeGmRg/6GJ9Qxut3Wydi1zHMB0Gpmql6G', TRUE);
+VALUES
+('admin', 'admin@admin.com', '$2b$10$5UK.OehThTfSwpJsB5cbaeGmRg/6GJ9Qxut3Wydi1zHMB0Gpmql6G', TRUE),
+('eugenio', 'eugenio@eugenio.com', '$2b$10$5UK.OehThTfSwpJsB5cbaeGmRg/6GJ9Qxut3Wydi1zHMB0Gpmql6G', FALSE);
 
 -- SELECT * FROM "users";
 
@@ -18,6 +20,8 @@ CREATE TABLE "posts" (
   "id" BIGSERIAL PRIMARY KEY,
   "title" VARCHAR(255) NOT NULL,
   "content" TEXT NOT NULL,
+  "image_name" TEXT NOT NULL,
+  "video_name" TEXT NOT NULL,
   "user_id" BIGINT NOT NULL,
   CONSTRAINT "fk_posts_users" FOREIGN KEY ("user_id") REFERENCES "users" ("id")
 );
@@ -28,7 +32,9 @@ VALUES
 ('Post title 2', 'Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 1),
 ('Post title 3', 'It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.', 1),
 ('Post title 4', 'It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 1),
-('Post title 5', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 1);
+('Post title 5', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 2),
+('Post title 6', 'The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using ''Content here, content here'', making it look like readable English.', 2),
+('Post title 7', 'Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for ''lorem ipsum'' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).', 2);
 
 -- SELECT * FROM "posts";
 
