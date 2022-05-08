@@ -1,0 +1,28 @@
+name: 'Node.js CI'
+on:
+  push:
+    branches:
+      - 'main'
+env:
+  HEROKU_APP_NAME: '${{ secrets.HEROKU_APP_NAME }}'
+  HEROKU_API_KEY: '${{ secrets.HEROKU_OAUTH_TOKEN }}'
+jobs:
+  push:
+    runs-on: 'ubuntu-latest'
+    strategy:
+      matrix:
+        node-version: ['12.x', '14.x', '16.x']
+    steps:
+      - name: 'Check out the repository'
+        uses: 'actions/checkout@v3'
+      - name: 'Set up Node.js ${{ matrix.node-version }}'
+        uses: 'actions/setup-node@v3'
+        with:
+          node-version: '${{ matrix.node-version }}'
+          cache: 'npm'
+      - name: Login to Heroku Container Registry
+        run: heroku container:login
+      - name: Build and push to Heroku Container Registry
+        run: heroku container:push -a $HEROKU_APP_NAME web
+      - name: Release to Heroku Container Registry
+        run: heroku container:release -a $HEROKU_APP_NAME web

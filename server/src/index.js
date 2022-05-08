@@ -5,6 +5,7 @@ const cors = require('cors');
 
 const API_PORT = process.env.API_PORT || 8080;
 const API_PREFIX = process.env.API_PREFIX;
+const PRODUCTION = process.env.PRODUCTION;
 
 const app = express();
 app.use(cors());
@@ -13,10 +14,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(API_PREFIX, require('./route/authRoute'));
 app.use(API_PREFIX, require('./route/postRoute'));
 app.use(API_PREFIX, require('./route/userRoute'));
-// app.use(express.static(path.join(__dirname, '..', 'build')));
-// app.get('/*', (req, res) => {
-//   res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
-// });
+if (PRODUCTION === 'true') {
+  app.use(express.static(path.join(__dirname, '..', 'build')));
+  app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
+  });
+}
 
 app.use(function (error, request, response, next) {
   if (
