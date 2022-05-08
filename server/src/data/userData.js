@@ -22,7 +22,7 @@ exports.findByLogin = function (login) {
 
 exports.save = function (user) {
   return database.one(
-    'INSERT INTO users (login, email, password) VALUES ($1, $2, $3) RETURNING login, email',
+    'INSERT INTO users (login, email, password) VALUES ($1, $2, $3) RETURNING id, login, email',
     [user.login, user.email, user.password]
   );
 };

@@ -12,6 +12,10 @@ exports.findByAuthor = function (author) {
   return postData.findByAuthor(author);
 };
 
+exports.findMediaByPostId = function (postId) {
+  return postData.findMediaByPostId(postId);
+};
+
 exports.findById = async function (postId) {
   const post = await postData.findById(postId);
   if (!post) throw new Error('Post not found');

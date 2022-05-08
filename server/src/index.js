@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 
@@ -12,7 +13,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(API_PREFIX, require('./route/authRoute'));
 app.use(API_PREFIX, require('./route/postRoute'));
 app.use(API_PREFIX, require('./route/userRoute'));
-app.use(API_PREFIX, require('./route/uploadRoute'));
+// app.use(express.static(path.join(__dirname, '..', 'build')));
+// app.get('/*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
+// });
 
 app.use(function (error, request, response, next) {
   if (

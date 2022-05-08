@@ -1,7 +1,10 @@
+import { ref, uploadBytes } from 'firebase/storage';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { v4 } from 'uuid';
 
 import api from '../../services/api';
+import { storage } from '../../services/firebase';
 
 export default function CreatePost() {
   const navigate = useNavigate();
@@ -14,39 +17,39 @@ export default function CreatePost() {
   const [error, setError] = useState('');
 
   const handleSubmit = async () => {
-    setError('');
-    setLoading(true);
     try {
       if (title === '' || content === '') {
         setError('Title and content are required');
         return;
       }
+      setError('');
+      setLoading(true);
       const uploaded = await uploadImageAndVideo();
-      const response = await api.post('/posts', {
+      await api.post('/posts', {
         title,
         content,
-        image: uploaded[0].data.fileName,
-        video: uploaded[1].data.fileName,
+        image: uploaded[0] ? uploaded[0] : '',
+        video: uploaded[1] ? uploaded[1] : '',
       });
       setLoading(false);
       setSuccess('Post created successfully. Redirecting...');
       setTimeout(() => {
-        navigate('/');
+        navigate(`/posts`);
       }, 3000);
     } catch (error) {
-      setError('deu ruim');
+      setError('An unexpected error occurred');
     }
   };
 
   const uploadImageAndVideo = async () => {
     const uploaded = [];
     if (image) {
-      const fileName = await uploadFile(image);
-      uploaded.push(fileName);
+      const response = await uploadFile(image);
+      uploaded.push(response.metadata.fullPath);
     }
     if (video) {
-      const fileName = await uploadFile(video);
-      uploaded.push(fileName);
+      const response = await uploadFile(video);
+      uploaded.push(response.metadata.fullPath);
     }
     return uploaded;
   };
@@ -55,7 +58,9 @@ export default function CreatePost() {
     const formData = new FormData();
     formData.append('file', file);
     try {
-      return api.post('/upload', formData);
+      const fileName = `${v4()}-${file.name}`;
+      const fileRef = ref(storage, `posts/files/${fileName}`);
+      return uploadBytes(fileRef, file);
     } catch (error) {
       setError(`An error occurred while uploading the file ${file.name}`);
     }
@@ -86,11 +91,11 @@ export default function CreatePost() {
             />
           </div>
           <div className="mb-3">
-            <label>Body</label>
+            <label>Content</label>
             <textarea
               type="text"
               className="form-control"
-              placeholder="Enter post body"
+              placeholder="Enter post content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
             />

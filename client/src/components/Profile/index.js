@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../../contexts/auth';
 import api from '../../services/api';
 
 export default function Profile() {
-  const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
   const [login, setLogin] = useState(currentUser.login);
   const [email, setEmail] = useState(currentUser.email);
@@ -18,6 +16,13 @@ export default function Profile() {
     try {
       if (login === '' || email === '') {
         setError('Login and email fields are required');
+        return;
+      }
+      if (
+        login === currentUser.login &&
+        email === currentUser.email &&
+        password === ''
+      ) {
         return;
       }
       await api.put(`/users/${currentUser.id}`, {

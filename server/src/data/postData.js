@@ -44,6 +44,16 @@ exports.findByAuthor = function (author) {
   );
 };
 
+exports.findMediaByPostId = function (postId) {
+  return database.query(
+    `SELECT "image_name" AS "imagePath",
+            "video_name" AS "videoPath"
+      FROM "posts"
+      WHERE "id" = $1`,
+    [postId]
+  );
+};
+
 exports.findById = function (postId) {
   return database.oneOrNone('SELECT * FROM "posts" WHERE "id" = $1', [postId]);
 };

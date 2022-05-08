@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  database:
+    container_name: 'asw2-postgres'
+    image: 'postgres:14.2-alpine'
+    ports:
+      - '5432:5432'
+    environment:
+      - 'POSTGRES_USER=postgres'
+      - 'POSTGRES_PASSWORD=123456'
+    volumes:
+      - './database/init.sql:/docker-entrypoint-initdb.d/init.sql'
+    restart: 'always'
+  server:
+    container_name: 'asw2-server'
+    image: 'node:16-alpine'
+    ports:
+      - '8080:8080'
+    depends_on:
+      - 'database'
+    build:
+      context: './server'
+      dockerfile: './server/Dockerfile'
+    environment:
+      - 'DATABASE_HOST=database'
+      - 'DATABASE_PORT=5432'
+      - 'DATABASE_NAME=postgres'
+      - 'DATABASE_USER=postgres'
+      - 'DATABASE_PASSWORD=123456'
+      - 'API_PORT=8080'
+    volumes:
+      - './server/:/app'
+  client:
+    container_name: 'asw2-client'
+    image: 'node:16-alpine'
+    ports:
+      - '3000:3000'
+    depends_on:
+      - 'server'
+    build:
+      context: './client'
+      dockerfile: './client/Dockerfile'
+    volumes:
+      - './client/:/app'

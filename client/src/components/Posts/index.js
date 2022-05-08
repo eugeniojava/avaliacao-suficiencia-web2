@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../../contexts/auth';
@@ -6,21 +6,12 @@ import api from '../../services/api';
 
 export default function Posts() {
   const navigate = useNavigate();
-  const { currentUser, logout } = useAuth();
+  const { currentUser } = useAuth();
   const [author, setAuthor] = useState('');
   const [authors, setAuthors] = useState([]);
   const [search, setSearch] = useState('');
   const [posts, setPosts] = useState([]);
   const [success, setSuccess] = useState('');
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     // You can await here
-  //     const response = await MyAPI.getData(someId);
-  //     // ...
-  //   }
-  //   fetchData();
-  // }, [someId]); // Or [] if effect doesn't need props or state
 
   useEffect(() => {
     async function fetchData() {
@@ -64,6 +55,9 @@ export default function Posts() {
     api.delete(`/posts/${postId}`).then(() => {
       setPosts(posts.filter((post) => post.id !== postId));
       setSuccess('Post deleted successfully');
+      setTimeout(() => {
+        setSuccess('');
+      }, 5000);
     });
   };
 
@@ -72,14 +66,6 @@ export default function Posts() {
       {success && (
         <div className="alert alert-success mt-3" role="alert">
           Post deleted successfully
-          <button
-            type="button"
-            className="btn-close"
-            aria-label="Close"
-            onClick={() => {
-              setSuccess('');
-            }}
-          ></button>
         </div>
       )}
       <select
@@ -116,7 +102,7 @@ export default function Posts() {
               <p>By: {item.login}</p>
               <button
                 onClick={() =>
-                  navigate(`/post/${item.id}`, {
+                  navigate(`/posts/${item.id}`, {
                     state: {
                       post: item,
                     },

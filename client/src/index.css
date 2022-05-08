@@ -24,6 +24,12 @@ span {
   font-family: 'Fira Sans', sans-serif;
 }
 
+.post-image {
+  width: 400px;
+  margin: 0 auto;
+  display: block;
+}
+
 body,
 html,
 .App,

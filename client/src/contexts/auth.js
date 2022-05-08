@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(false);
 
   const register = useCallback(async (login, email, password) => {
-    const { data: user } = await api.post('/users', {
+    await api.post('/users', {
       login,
       email,
       password,

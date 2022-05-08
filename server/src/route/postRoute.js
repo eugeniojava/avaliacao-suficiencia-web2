@@ -18,6 +18,15 @@ router.get('/posts', async function (request, response, next) {
   }
 });
 
+router.get('/posts/:postId/media', async function (request, response, next) {
+  try {
+    media = await postService.findMediaByPostId(request.params.postId);
+    response.json(media);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.post('/posts', authenticate, async function (request, response, next) {
   if (!request.body.title || !request.body.content) {
     response.status(400).json({ error: 'Title and content are required' });

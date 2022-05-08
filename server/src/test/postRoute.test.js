@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const axios = require('axios');
 const postService = require('../service/postService');
+const userService = require('../service/userService');
 
 const API_PORT = process.env.API_PORT || 8080;
 const API_URL = `http://localhost:${API_PORT}/api/v1`;
@@ -14,17 +15,26 @@ const request = function (url, method, data) {
 };
 
 test('Should find all posts', async function () {
+  const user = await userService.save({
+    login: generateRandomString(),
+    email: generateRandomString() + '@gmail.com',
+    password: generateRandomString(),
+  });
+  console.log(user);
   const post1 = await postService.save({
     title: generateRandomString(),
     content: generateRandomString(),
+    userId: user.id,
   });
   const post2 = await postService.save({
     title: generateRandomString(),
     content: generateRandomString(),
+    userId: user.id,
   });
   const post3 = await postService.save({
     title: generateRandomString(),
     content: generateRandomString(),
+    userId: user.id,
   });
 
   const response = await request(`${API_URL}/posts`, 'GET');

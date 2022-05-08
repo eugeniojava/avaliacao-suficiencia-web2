@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const userData = require('../data/userData');
 
 const ENCRYPTION_SALT = 10;
