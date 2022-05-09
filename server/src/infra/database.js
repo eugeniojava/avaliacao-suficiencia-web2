@@ -1,12 +1,10 @@
 const pgPromise = require('pg-promise')();
 
 const database = pgPromise({
-  host: process.env.DATABASE_HOST,
-  port: process.env.DATABASE_PORT,
-  database: process.env.DATABASE_NAME,
-  user: process.env.DATABASE_USER,
-  password: process.env.DATABASE_PASSWORD,
-  ssl: false,
+  connectionString:
+    process.env.DATABASE_URL ||
+    `postgres://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`,
+  ssl: null,
 });
 
 module.exports = database;

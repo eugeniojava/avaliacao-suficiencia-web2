@@ -5,16 +5,22 @@ const cors = require('cors');
 
 const API_PORT = process.env.PORT || process.env.API_PORT || 8080;
 const API_PREFIX = process.env.API_PREFIX;
-const PRODUCTION = process.env.PRODUCTION;
-
+const ENVIRONMENT = process.env.NODE_ENV;
 const app = express();
+
 app.use(cors());
+
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
+
 app.use(API_PREFIX, require('./route/authRoute'));
+
 app.use(API_PREFIX, require('./route/postRoute'));
+
 app.use(API_PREFIX, require('./route/userRoute'));
-if (PRODUCTION === 'true') {
+
+if (ENVIRONMENT === 'production') {
   app.use(express.static(path.join(__dirname, '..', 'build')));
   app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
