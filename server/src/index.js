@@ -3,7 +3,7 @@ const path = require('path');
 const express = require('express');
 const cors = require('cors');
 
-const API_PORT = process.env.API_PORT || 8080;
+const API_PORT = process.env.PORT || process.env.API_PORT || 8080;
 const API_PREFIX = process.env.API_PREFIX;
 const PRODUCTION = process.env.PRODUCTION;
 
