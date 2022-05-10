@@ -3,7 +3,7 @@ WORKDIR /client
 COPY client/package*.json ./
 RUN npm install
 COPY client/. ./
-ENV REACT_APP_API_URL ${REACT_APP_API_URL}
+ENV REACT_APP_API_URL https://asw2-my-posts.herokuapp.com
 RUN npm run build
 WORKDIR /app
 RUN mv /client/build ./
