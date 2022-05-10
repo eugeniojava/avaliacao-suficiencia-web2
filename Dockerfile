@@ -3,7 +3,6 @@ WORKDIR /client
 COPY client/package*.json ./
 RUN npm install
 COPY client/. ./
-ENV REACT_APP_API_URL https://asw2-my-posts.herokuapp.com
 RUN npm run build
 WORKDIR /app
 RUN mv /client/build ./
@@ -11,5 +10,5 @@ RUN rm -rf /client
 COPY server/package*.json ./
 RUN npm install
 COPY server/. ./
-ENV PRODUCTION true
+ENV NODE_ENV production
 CMD ["npm", "start"]

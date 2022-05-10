@@ -1,9 +1,8 @@
 require('dotenv').config();
-const path = require('path');
 const express = require('express');
 const cors = require('cors');
 
-const API_PORT = process.env.PORT || process.env.API_PORT || 8080;
+const PORT = process.env.PORT || 8080;
 const API_PREFIX = process.env.API_PREFIX;
 const ENVIRONMENT = process.env.NODE_ENV;
 const app = express();
@@ -21,9 +20,10 @@ app.use(API_PREFIX, require('./route/postRoute'));
 app.use(API_PREFIX, require('./route/userRoute'));
 
 if (ENVIRONMENT === 'production') {
+  const path = require('path');
   app.use(express.static(path.join(__dirname, '..', 'build')));
-  app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
+  app.get('/*', (request, response) => {
+    response.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
   });
 }
 
@@ -56,6 +56,6 @@ app.use(function (error, request, response, next) {
   response.status(500).json({ error: error.message });
 });
 
-app.listen(API_PORT, () => {
-  console.log(`Listening on port ${API_PORT}`);
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
 });
