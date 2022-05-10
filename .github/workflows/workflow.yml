@@ -6,6 +6,7 @@ on:
 env:
   HEROKU_APP_NAME: '${{ secrets.HEROKU_APP_NAME }}'
   HEROKU_API_KEY: '${{ secrets.HEROKU_OAUTH_TOKEN }}'
+  REACT_APP_API_URL: '${{ secrets.REACT_APP_API_URL }}'
 jobs:
   push:
     runs-on: 'ubuntu-latest'
